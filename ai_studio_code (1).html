@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palak's Wonderland 🌸</title>
+    
+    <!-- Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&family=Gaegu:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --palak-pink: #ff85a1;
+            --palak-purple: #9b5de5;
+            --palak-yellow: #fee440;
+            --palak-blue: #00bbf9;
+            --palak-green: #00f5d4;
+            --soft-bg: #fff5f8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Gaegu', cursive;
+            background-color: var(--soft-bg);
+            color: #444;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(#ffcad4 1px, transparent 1px),
+                radial-gradient(#ffcad4 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            scroll-behavior: smooth;
+        }
+
+        /* --- DECORATIONS --- */
+        .sparkle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, white 20%, transparent 70%);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        }
+
+        .floating-sticker {
+            position: absolute;
+            font-size: 3rem;
+            pointer-events: none;
+            z-index: 1;
+            filter: drop-shadow(5px 5px 0px rgba(0,0,0,0.05));
+        }
+
+        /* --- NAV --- */
+        nav {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+            background: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 3px solid var(--palak-pink);
+            box-shadow: 8px 8px 0px var(--palak-pink);
+        }
+
+        nav a { text-decoration: none; color: #333; font-weight: bold; font-size: 1.2rem; transition: 0.3s; }
+        nav a:hover { color: var(--palak-pink); transform: scale(1.1); }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(180deg, #fff0f3 0%, #ffccd5 100%);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(4rem, 15vw, 8rem);
+            color: var(--palak-pink);
+            text-shadow: 4px 4px 0px white;
+            z-index: 2;
+        }
+
+        .love-counter-pill {
+            background: white;
+            border: 3px solid var(--palak-purple);
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            box-shadow: 6px 6px 0px var(--palak-purple);
+            margin-top: 20px;
+            z-index: 2;
+        }
+
+        /* --- BRUNO (SVG) --- */
+        #bruno-container {
+            position: fixed;
+            bottom: 10px;
+            width: 120px;
+            z-index: 9998;
+        }
+
+        /* --- GALLERY --- */
+        .gallery-world { padding: 100px 0; background: #fefae0; border-top: 10px dotted var(--palak-yellow); }
+        .carousel-track { display: flex; gap: 30px; padding: 50px; cursor: grab; overflow-x: auto; scrollbar-width: none; }
+        .carousel-track::-webkit-scrollbar { display: none; }
+        .polaroid {
+            min-width: 280px;
+            background: white;
+            padding: 15px 15px 60px 15px;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.05);
+            border: 1px solid #ddd;
+            transform: rotate(var(--r));
+            transition: 0.3s;
+        }
+        .polaroid img { width: 100%; height: 280px; object-fit: cover; }
+
+        /* --- RUMI --- */
+        .rumi-world {
+            min-height: 100vh;
+            background: #cdb4db;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            text-align: center;
+        }
+        .rumi-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 30px;
+            max-width: 600px;
+            border: 5px solid var(--palak-purple);
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.1);
+        }
+
+        /* --- GAME --- */
+        .game-world { background: #2d3436; padding: 100px 20px; display: flex; flex-direction: column; align-items: center; color: white; }
+        .game-frame { position: relative; border: 10px solid var(--palak-green); border-radius: 40px; overflow: hidden; }
+
+        /* --- TRAVEL --- */
+        .travel-world {
+            background: #a2d2ff;
+            padding: 100px 20px;
+            min-height: 100vh;
+        }
+
+        .travel-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 40px;
+            border: 8px solid var(--palak-blue);
+            box-shadow: 20px 20px 0px #60a5fa;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        input {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px 25px;
+            border-radius: 20px;
+            border: 4px solid var(--palak-blue);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .postcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .postcard {
+            background: #fff;
+            border: 10px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            position: relative;
+            transition: transform 0.3s;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+        .postcard:hover { transform: translateY(-10px) rotate(2deg); z-index: 5; }
+        .postcard img { width: 100%; height: 200px; object-fit: cover; display: block; background: #eee; }
+        .postcard-info { padding: 15px; text-align: center; font-weight: bold; font-size: 1.4rem; background: #fafafa; border-top: 2px dashed #ddd; font-family: 'Dancing Script', cursive; }
+
+        .delete-btn {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: #ff4d6d;
+            color: white;
+            border: 3px solid white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: 0.2s;
+        }
+        .delete-btn:hover { background: #333; transform: scale(1.1); }
+
+        .btn-cute {
+            background: var(--palak-pink);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #333;
+            font-family: 'Gaegu';
+            font-weight: bold;
+        }
+        .btn-cute:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #333; }
+
+        .hidden { display: none !important; }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#hero">Us</a>
+        <a href="#gallery">Photos</a>
+        <a href="#rumi">Wisdom</a>
+        <a href="#game">Ather Run</a>
+        <a href="#travel">Dreams</a>
+    </nav>
+
+    <!-- BRUNO (SVG) -->
+    <div id="bruno-container">
+        <svg id="bruno-svg" viewBox="0 0 200 200">
+            <path fill="#F4A460" d="M40,80 Q40,40 80,40 L120,40 Q160,40 160,80 L160,140 Q160,180 120,180 L80,180 Q40,180 40,140 Z" />
+            <circle fill="#F4A460" cx="60" cy="50" r="30" />
+            <circle fill="#F4A460" cx="140" cy="50" r="30" />
+            <circle fill="white" cx="75" cy="90" r="8" />
+            <circle fill="white" cx="125" cy="90" r="8" />
+            <circle fill="black" cx="75" cy="90" r="4" />
+            <circle fill="black" cx="125" cy="90" r="4" />
+            <path fill="#333" d="M90,120 Q100,130 110,120 L100,115 Z" />
+            <rect fill="#FF4D6D" x="80" y="170" width="40" height="10" rx="5" />
+        </svg>
+    </div>
+
+    <!-- SECTION: HERO -->
+    <section class="hero" id="hero">
+        <div class="floating-sticker" style="top:20%; left:10%;">🌸</div>
+        <div class="floating-sticker" style="top:15%; right:15%;">✨</div>
+        <h1 id="palak-title">Palak.</h1>
+        <div class="love-counter-pill" id="day-counter">Counting our days...</div>
+    </section>
+
+    <!-- SECTION: GALLERY -->
+    <section class="gallery-world" id="gallery">
+        <h2 style="text-align:center; font-size:4rem; font-family:'Dancing Script'; margin-bottom:20px;">Scrapbook Moments</h2>
+        <div class="carousel-track" id="carouselTrack">
+            <!-- YOUR PERSONALIZED IMAGES START HERE -->
+            <div class="polaroid" style="--r:-3deg"><img src="images/IMG-20260418-WA0047.jpg" alt="Our Memory 1"></div>
+            <div class="polaroid" style="--r:2deg"><img src="images/IMG-20260418-WA0046.jpg" alt="Our Memory 2"></div>
+            <div class="polaroid" style="--r:-1deg"><img src="images/IMG-20260418-WA0045.jpg" alt="Our Memory 3"></div>
+            <div class="polaroid" style="--r:4deg"><img src="images/IMG-20260418-WA0044.jpg" alt="Our Memory 4"></div>
+            <div class="polaroid" style="--r:-2deg"><img src="images/IMG-20260418-WA0043.jpg" alt="Our Memory 5"></div>
+            <div class="polaroid" style="--r:3deg"><img src="images/IMG-20260418-WA0042.jpg" alt="Our Memory 6"></div>
+            <div class="polaroid" style="--r:-4deg"><img src="images/IMG-20260418-WA0041.jpg" alt="Our Memory 7"></div>
+            <div class="polaroid" style="--r:1deg"><img src="images/IMG-20260418-WA0040.jpg" alt="Our Memory 8"></div>
+            <div class="polaroid" style="--r:5deg"><img src="images/IMG-20260418-WA0039(1).jpg" alt="Our Memory 9"></div>
+            <div class="polaroid" style="--r:-3deg"><img src="images/IMG-20260417-WA0024.jpg" alt="Our Memory 10"></div>
+            <!-- END OF IMAGES -->
+        </div>
+    </section>
+
+    <!-- SECTION: RUMI -->
+    <section class="rumi-world" id="rumi">
+        <h2 style="font-family:'Playfair Display'; font-size:3.5rem; color:white; margin-bottom:30px; font-style:italic;">Words for your Soul</h2>
+        <div class="rumi-card">
+            <p id="quote-text" style="font-size:2rem; line-height:1.4;">"Lovers don't finally meet somewhere. They're in each other all along."</p>
+            <button class="btn-cute" style="margin-top:30px;" onclick="newQuote()">Next Quote</button>
+        </div>
+    </section>
+
+    <!-- SECTION: GAME -->
+    <section class="game-world" id="game">
+        <h2 style="font-family:'Dancing Script'; font-size:4rem; color:var(--palak-green); margin-bottom:20px;">Ather Dash</h2>
+        <div class="game-frame">
+            <canvas id="gameCanvas" width="350" height="550"></canvas>
+            <div id="game-overlay" style="position:absolute; inset:0; background:rgba(0,0,0,0.85); display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                <h3 id="overlay-title" style="font-size:2rem; margin-bottom:15px;">Palak's Joyride</h3>
+                <button class="btn-cute" onclick="startGame()">Go!</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: TRAVEL -->
+    <section class="travel-world" id="travel">
+        <div class="travel-container">
+            <h2 style="font-family:'Dancing Script'; font-size:4rem; color:var(--palak-blue); margin-bottom:10px;">Our Dream Map ✈️</h2>
+            <p style="margin-bottom:30px; font-weight:600;">Where should we fly to next, my love?</p>
+            
+            <div class="search-box">
+                <input type="text" id="destInput" list="destSuggestions" placeholder="Enter any city or country (e.g. Udaipur, London...)">
+                <datalist id="destSuggestions">
+                    <option value="Udaipur, Rajasthan">
+                    <option value="Paris, France">
+                    <option value="Kyoto, Japan">
+                    <option value="Maldives">
+                    <option value="Santorini, Greece">
+                </datalist>
+                <button class="btn-cute" onclick="addDest()">Stamp Postcard</button>
+            </div>
+
+            <div class="postcard-grid" id="postcardGrid"></div>
+        </div>
+    </section>
+
+    <script>
+        /* --- SPARKLES --- */
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.92) {
+                const s = document.createElement('div');
+                s.className = 'sparkle';
+                s.style.left = e.pageX + 'px';
+                s.style.top = e.pageY + 'px';
+                document.body.appendChild(s);
+                gsap.to(s, { y: -60, opacity: 0, scale: 0.5, duration: 1, onComplete: () => s.remove() });
+            }
+        });
+
+        /* --- DAY COUNTER --- */
+        // ANNIVERSARY DATE UPDATED HERE
+        const start = new Date('2026-03-16'); 
+        function calcTime() {
+            const now = new Date();
+            const days = Math.floor((now - start) / (1000*60*60*24));
+            // Handle case for future date
+            if (days >= 0) {
+                 document.getElementById('day-counter').innerText = `${days} Days Together ❤️`;
+            } else {
+                 document.getElementById('day-counter').innerText = `Counting down the days...`;
+            }
+        }
+        calcTime();
+
+        /* --- BRUNO MOVEMENT --- */
+        let brunoX = -120;
+        function animateBruno() {
+            brunoX += 1.8;
+            if (brunoX > window.innerWidth) brunoX = -150;
+            gsap.set("#bruno-container", { x: brunoX, y: Math.sin(brunoX/25) * 8 });
+            requestAnimationFrame(animateBruno);
+        }
+        animateBruno();
+
+        /* --- RUMI QUOTES --- */
+        const rumiQuotes = [ "Lovers don't finally meet somewhere. They're in each other all along.", "In your light I learn how to love.", "Let the beauty of what you love be what you do.", "Wherever you are, and whatever you do, be in love.", "The wound is the place where the Light enters you.", "What you seek is seeking you.", "Only from the heart can you touch the sky.", "The minute I heard my first love story I started looking for you.", "Love is the bridge between you and everything.", "Silence is the language of God, all else is poor translation.", "Dance, when you're broken open.", "Everything in the universe is within you.", "Words are a pretext. It is the inner bond that draws us.", "Goodbyes are only for those who love with their eyes.", "You are the entire ocean in a drop.", "Beauty surrounds us.", "Love is the soul's light.", "Set your life on fire. Seek those who fan your flames.", "Close your eyes, fall in love, stay there.", "Be like the sun for grace and mercy.", "Wear gratitude like a cloak.", "Maybe you are searching among the branches for the roots.", "There is a candle in your heart.", "Respond to every call that excites your spirit.", "Your task is to find the barriers within you against love."];
+        function newQuote() {
+            const q = rumiQuotes[Math.floor(Math.random() * rumiQuotes.length)];
+            const text = document.getElementById('quote-text');
+            gsap.to(text, { opacity: 0, duration: 0.3, onComplete: () => { text.innerText = `"${q}"`; gsap.to(text, { opacity: 1, duration: 0.3 }); }});
+        }
+
+        /* --- TRAVEL LIST (UNIVERSAL POSTCARDS) --- */
+        let places = JSON.parse(localStorage.getItem('palak_dream_map')) || [
+            { name: "Udaipur", img: "https://loremflickr.com/400/300/udaipur,city/all" },
+            { name: "Paris", img: "https://loremflickr.com/400/300/paris,tower/all" }
+        ];
+        function renderPostcards() {
+            const grid = document.getElementById('postcardGrid');
+            grid.innerHTML = "";
+            places.forEach((p, index) => {
+                const card = document.createElement('div');
+                card.className = 'postcard';
+                card.innerHTML = `<button class="delete-btn" title="Remove" onclick="deleteDest(${index})">✕</button><img src="${p.img}" alt="${p.name}" onerror="this.src='https://picsum.photos/seed/travel/400/300'"><div class="postcard-info">${p.name}</div>`;
+                grid.appendChild(card);
+            });
+            localStorage.setItem('palak_dream_map', JSON.stringify(places));
+        }
+        function addDest() {
+            const input = document.getElementById('destInput');
+            const location = input.value.trim();
+            if (location) {
+                const imgUrl = `https://loremflickr.com/400/300/${encodeURIComponent(location.toLowerCase())}/all`;
+                places.push({ name: location, img: imgUrl });
+                input.value = "";
+                renderPostcards();
+            }
+        }
+        function deleteDest(index) {
+            places.splice(index, 1);
+            renderPostcards();
+        }
+        renderPostcards();
+
+        /* --- ATHER RUN GAME --- */
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let active = false, score = 0, frames = 0;
+        let p = { x: 155, y: 450, w: 40, h: 70 };
+        let obs = [];
+        function startGame() {
+            document.getElementById('game-overlay').classList.add('hidden');
+            active = true; score = 0; obs = []; frames = 0; p.x = 155;
+            loop();
+        }
+        function loop() {
+            if(!active) return;
+            ctx.clearRect(0,0,350,550);
+            ctx.setLineDash([20, 30]);
+            ctx.strokeStyle = "rgba(255,255,255,0.2)";
+            ctx.beginPath(); ctx.moveTo(116,0); ctx.lineTo(116,550); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(232,0); ctx.lineTo(232,550); ctx.stroke();
+            ctx.fillStyle = "#111"; ctx.fillRect(p.x, p.y+10, 40, 50); 
+            ctx.fillStyle = "#00f5d4"; ctx.fillRect(p.x+15, p.y+20, 10, 30);
+            ctx.fillStyle = "white"; ctx.fillRect(p.x+17, p.y+2, 6, 10);
+            if(frames % 70 === 0) {
+                obs.push({ x: Math.floor(Math.random()*3)*116 + 40, y: -50 });
+            }
+            obs.forEach((o, i) => {
+                o.y += 5 + (score/150);
+                ctx.fillStyle = "#ff4d6d";
+                ctx.beginPath(); ctx.arc(o.x+15, o.y+15, 15, 0, Math.PI*2); ctx.fill();
+                if(p.x < o.x+20 && p.x+40 > o.x && p.y < o.y+20 && p.y+70 > o.y) {
+                    active = false;
+                    document.getElementById('game-overlay').classList.remove('hidden');
+                    document.getElementById('overlay-title').innerText = "Score: " + score;
+                }
+                if(o.y > 550) { obs.splice(i, 1); score += 10; }
+            });
+            frames++;
+            requestAnimationFrame(loop);
+        }
+        window.addEventListener('keydown', (e) => {
+            if(e.key === "ArrowLeft" && p.x > 50) p.x -= 116;
+            if(e.key === "ArrowRight" && p.x < 200) p.x += 116;
+        });
+
+        gsap.from("#palak-title", { opacity: 0, y: 50, duration: 1.5, ease: "back.out" });
+
+    </script>
+</body>
+</html>
